@@ -64,6 +64,7 @@ Very easy to start with:
         Origins     [4]string `clap:"--origins,-O,mandatory"`
         Port        int      `clap:",-P,mandatory"`
         ConfigFiles []string `clap:"trailing"`
+        Option     string    `clap:",-o,optional"`
     }
 ```
 
