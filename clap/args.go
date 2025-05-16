@@ -62,11 +62,20 @@ func argsToFields(args []string, fieldDescs map[string]*fieldDescription, cfg an
 				fallthrough
 			case reflect.String, reflect.Float32, reflect.Float64:
 				i++
-				if i >= len(args) || strings.HasPrefix(args[i], "-") {
-					results.Missing = append(results.Missing, arg)
-					return results, fmt.Errorf("argument '%s': %w (missing argument)", arg, ErrMissingArgumentValue)
+				if !desc.Optional {
+					if i >= len(args) || strings.HasPrefix(args[i], "-") {
+						results.Missing = append(results.Missing, arg)
+						return results, fmt.Errorf("argument '%s': %w (missing argument)", arg, ErrMissingArgumentValue)
+					}
+					desc.Args = append(desc.Args, args[i])
+				} else {
+					if i >= len(args) || strings.HasPrefix(args[i], "-") {
+						desc.Args = append(desc.Args, "")
+						i--
+					} else {
+						desc.Args = append(desc.Args, args[i])
+					}
 				}
-				desc.Args = append(desc.Args, args[i])
 			case reflect.Bool:
 				desc.Args = append(desc.Args, fmt.Sprintf("%v", !strings.HasPrefix(arg, "--no-")))
 			case reflect.Slice, reflect.Array:
@@ -139,13 +148,27 @@ func fillStruct(args []string, fieldDescs map[string]*fieldDescription, cfg any)
 		case reflect.String:
 			field.SetString(desc.Args[0])
 		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-			val, err := strconv.ParseInt(desc.Args[0], 10, 64)
-			if err != nil {
-				results.Unexpected = append(results.Unexpected, name)
-				return results, fmt.Errorf("argument '%s': %w (got '%s', expected integer)", name,
-					ErrUnexpectedArgument, desc.Args[0])
+			if !desc.Optional {
+				val, err := strconv.ParseInt(desc.Args[0], 10, 64)
+				if err != nil {
+					results.Unexpected = append(results.Unexpected, name)
+					return results, fmt.Errorf("argument '%s': %w (got '%s', expected integer)", name,
+						ErrUnexpectedArgument, desc.Args[0])
+				}
+				field.SetInt(val)
+			} else {
+				if desc.Args[0] == "" {
+					field.SetInt(0)
+				} else {
+					val, err := strconv.ParseInt(desc.Args[0], 10, 64)
+					if err != nil {
+						results.Unexpected = append(results.Unexpected, name)
+						return results, fmt.Errorf("argument '%s': %w (got '%s', expected integer)", name,
+							ErrUnexpectedArgument, desc.Args[0])
+					}
+					field.SetInt(val)
+				}
 			}
-			field.SetInt(val)
 		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 			val, err := strconv.ParseInt(desc.Args[0], 10, 64)
 			if err != nil {

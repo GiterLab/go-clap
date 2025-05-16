@@ -22,6 +22,7 @@ type Results struct {
 	Ignored    []string
 	Mandatory  []string
 	Duplicated []string
+	FieldFound []string
 }
 
 /*

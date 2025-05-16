@@ -12,6 +12,7 @@ var ErrInvalidTag = errors.New("invalid tag")
 const (
 	trailing  string = "trailing"
 	mandatory string = "mandatory"
+	optional  string = "optional"
 )
 
 func getTrailingFieldDescription(tags []string, field reflect.StructField) (*fieldDescription, error) {
@@ -39,11 +40,15 @@ func getShortNameFieldDescription(tags []string, field reflect.StructField) (*fi
 	}
 	if len(tags) == 3 {
 		tag := strings.Trim(tags[2], " ")
-		if tag != mandatory {
-			return nil, fmt.Errorf("field '%s': %w (got '%s', expected '%s,mandatory')", field.Name,
+		switch tag {
+		case mandatory:
+			fieldDesc.Mandatory = true
+		case optional:
+			fieldDesc.Optional = true
+		default:
+			return nil, fmt.Errorf("field '%s': %w (got '%s', expected '%s,mandatory or optional')", field.Name,
 				ErrInvalidTag, field.Tag.Get("clap"), field.Name)
 		}
-		fieldDesc.Mandatory = true
 	}
 	return fieldDesc, nil
 }
@@ -62,11 +67,15 @@ func getLongNameFieldDescription(tags []string, field reflect.StructField) (*fie
 			}
 			if len(tags) == 3 {
 				tag := strings.Trim(tags[2], " ")
-				if tag != mandatory {
-					return nil, fmt.Errorf("field '%s': %w (got '%s', expected '%s,mandatory')", field.Name,
+				switch tag {
+				case mandatory:
+					fieldDesc.Mandatory = true
+				case optional:
+					fieldDesc.Optional = true
+				default:
+					return nil, fmt.Errorf("field '%s': %w (got '%s', expected '%s,mandatory or optional')", field.Name,
 						ErrInvalidTag, field.Tag.Get("clap"), field.Name)
 				}
-				fieldDesc.Mandatory = true
 			}
 		}
 	}

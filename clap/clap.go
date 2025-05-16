@@ -50,5 +50,12 @@ func Parse[T any](args []string, cfg *T) (*Results, error) {
 	if results, err = fillStruct(args, fieldDescs, cfg); err != nil {
 		return results, err
 	}
+	foundField := []string{}
+	for _, description := range fieldDescs {
+		if description.Found == true {
+			foundField = append(foundField, description.LongName+","+description.ShortName)
+		}
+	}
+	results.FieldFound = foundField
 	return results, nil
 }
