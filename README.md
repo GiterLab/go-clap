@@ -1,7 +1,3 @@
-[![Release](https://img.shields.io/github/v/release/fred1268/go-clap.svg?style=flat-square)](https://github.com/fred1268/go-clap)
-[![Go Report](https://goreportcard.com/badge/github.com/fred1268/go-clap)](https://goreportcard.com/report/github.com/fred1268/go-clap)
-[![Codecov](https://codecov.io/github/fred1268/go-clap/graph/badge.svg?token=Z4KUF67S8W)](https://codecov.io/github/fred1268/go-clap)
-[![Go Reference](https://pkg.go.dev/badge/github.com/fred1268/go-clap)](https://pkg.go.dev/github.com/fred1268/go-clap)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
@@ -47,7 +43,7 @@ with the values passed on the command line for those commands / subcommands.
 ## Installation
 
 ```go
-go get github.com/fred1268/go-clap
+go get github.com/GiterLab/go-clap
 ```
 
 ---
@@ -62,12 +58,12 @@ Very easy to start with:
 
 ```go
     type config struct {
-    	Cookie      string   `clap:"--cookie"`
-    	HTTPOnly    bool     `clap:"--httpOnly"`
-    	Secure      bool     `clap:"--secure"`
-    	Origins     [4]string `clap:"--origins,-O,mandatory"`
-    	Port        int      `clap:",-P,mandatory"`
-    	ConfigFiles []string `clap:"trailing"`
+        Cookie      string   `clap:"--cookie"`
+        HTTPOnly    bool     `clap:"--httpOnly"`
+        Secure      bool     `clap:"--secure"`
+        Origins     [4]string `clap:"--origins,-O,mandatory"`
+        Port        int      `clap:",-P,mandatory"`
+        ConfigFiles []string `clap:"trailing"`
     }
 ```
 
@@ -95,7 +91,7 @@ In your main, just make a call to `clap.Parse()`:
         var err error
         var results *clap.Results
         // define your defaults
-    	cfg := &config{Secure: true}
+        cfg := &config{Secure: true}
         // note you may want to skip the first few
         // parameters (like command and subcommand)
         // by passing args[2:] instead of args
@@ -121,16 +117,16 @@ You will get the following struct:
 
 ```go
     config{
-    	Cookie:   "clapcookie",
-    	HTTPOnly: true,
-    	Secure:   true, // comes from your default (not in the command line)
-    	Origins: []string{
-    		"http://localhost:5137", "https://localhost:5173",
-    		"http://localhost:3000", "https://localhost:3000",
-    	},
-    	Port:        8080,
-    	// trailing parameters
-    	ConfigFiles: []string{"config-db.json", "config-log.json"},
+        Cookie:   "clapcookie",
+        HTTPOnly: true,
+        Secure:   true, // comes from your default (not in the command line)
+        Origins: []string{
+            "http://localhost:5137", "https://localhost:5173",
+            "http://localhost:3000", "https://localhost:3000",
+        },
+        Port:        8080,
+        // trailing parameters
+        ConfigFiles: []string{"config-db.json", "config-log.json"},
     }
 ```
 
@@ -170,30 +166,30 @@ Here is an example:
 
 ```go
 type RunParams struct {
-	ForceRebuild bool `clap:",-a"`
-	PrintOnly    bool `clap:",-n"`
+    ForceRebuild bool `clap:",-a"`
+    PrintOnly    bool `clap:",-n"`
     // ...
 }
 
 type TestParams struct {
-	Binary      string `clap:",-o"`
-	CompileOnly bool   `clap:",-c"`
+    Binary      string `clap:",-o"`
+    CompileOnly bool   `clap:",-c"`
     // ...
 }
 
 func main() {
-	if len(os.Args) < 2 {
-		os.Exit(1)
-	}
-	var runParams RunParams
-	var testParams TestParams
-	switch os.Args[1] {
-	case "run":
-		clap.Parse(os.Args[2:], &runParams)
-	case "test":
-		clap.Parse(os.Args[2:], &testParams)
-	}
-	fmt.Printf("%v\n%v\n", runParams, testParams)
+    if len(os.Args) < 2 {
+        os.Exit(1)
+    }
+    var runParams RunParams
+    var testParams TestParams
+    switch os.Args[1] {
+    case "run":
+        clap.Parse(os.Args[2:], &runParams)
+    case "test":
+        clap.Parse(os.Args[2:], &testParams)
+    }
+    fmt.Printf("%v\n%v\n", runParams, testParams)
 }
 ```
 

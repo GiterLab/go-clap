@@ -3,7 +3,7 @@ package clap_test
 import (
 	"testing"
 
-	"github.com/fred1268/go-clap/clap"
+	"github.com/GiterLab/go-clap/clap"
 )
 
 func TestNonEmptyTrailing(t *testing.T) {
