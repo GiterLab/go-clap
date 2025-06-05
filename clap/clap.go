@@ -54,9 +54,9 @@ func Parse[T any](args []string, cfg *T) (*Results, error) {
 	for _, description := range fieldDescs {
 		if description.Found {
 			if description.Nil {
-				foundField[description.LongName+","+description.ShortName] = "Nil"
+				foundField[description.LongName+","+description.ShortName] = FieldNil
 			} else {
-				foundField[description.LongName+","+description.ShortName] = "Non-Nil"
+				foundField[description.LongName+","+description.ShortName] = FieldNonNil
 			}
 		}
 	}

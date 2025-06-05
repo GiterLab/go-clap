@@ -1,5 +1,10 @@
 package clap
 
+const (
+	FieldNil    = "Nil"
+	FieldNonNil = "Non-Nil"
+)
+
 /*
 Represents the results of the command line parsing.
 
