@@ -22,7 +22,7 @@ type Results struct {
 	Ignored    []string
 	Mandatory  []string
 	Duplicated []string
-	FieldFound []string
+	FieldFound map[string]string
 }
 
 /*

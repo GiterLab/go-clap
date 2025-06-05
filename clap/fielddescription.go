@@ -12,4 +12,5 @@ type fieldDescription struct {
 	Found     bool
 	Visited   bool
 	Optional  bool
+	Nil       bool
 }

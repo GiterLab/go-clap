@@ -71,6 +71,7 @@ func argsToFields(args []string, fieldDescs map[string]*fieldDescription, cfg an
 				} else {
 					if i >= len(args) || strings.HasPrefix(args[i], "-") {
 						desc.Args = append(desc.Args, "")
+						desc.Nil = true
 						i--
 					} else {
 						desc.Args = append(desc.Args, args[i])

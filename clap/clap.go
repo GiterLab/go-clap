@@ -50,10 +50,14 @@ func Parse[T any](args []string, cfg *T) (*Results, error) {
 	if results, err = fillStruct(args, fieldDescs, cfg); err != nil {
 		return results, err
 	}
-	foundField := []string{}
+	foundField := make(map[string]string)
 	for _, description := range fieldDescs {
-		if description.Found == true {
-			foundField = append(foundField, description.LongName+","+description.ShortName)
+		if description.Found {
+			if description.Nil {
+				foundField[description.LongName+","+description.ShortName] = "Nil"
+			} else {
+				foundField[description.LongName+","+description.ShortName] = "Non-Nil"
+			}
 		}
 	}
 	results.FieldFound = foundField
